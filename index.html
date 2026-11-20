@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumen: clock, launcher and clear taskbar for Windows 11</title>
+<meta name="description" content="One small native Windows 11 app that replaces Rainmeter, PowerToys Run and TranslucentTB. Up to 40 MB of RAM.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="beam" viewBox="0 0 64 64">
+    <rect class="b-stem" x="15" y="10" width="9.5" height="44" rx="4.75"/>
+    <rect class="b-foot" x="15" y="44.5" width="34" height="9.5" rx="4.75"/>
+    <circle class="b-dot" cx="44" cy="21" r="5.25"/>
+  </symbol>
+</svg>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Lumen">
+    <svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15.4" fill="#000" stroke="#2a2a2a" stroke-width="1.5"/><use href="#beam" fill="#fff"/></svg>
+    <span>Lumen</span>
+  </a>
+  <nav aria-label="Primary">
+    <a href="#modules">Modules</a>
+    <a href="#island">Island</a>
+    <a href="#settings">Settings</a>
+    <a href="#performance">Performance</a>
+    <a class="btn btn-sm" href="https://github.com/hasthij/Lumen/releases/latest">Download</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero wrap">
+    <p class="label reveal">Windows 11 · Free · Open source</p>
+    <h1 class="lines">
+      <span class="ln"><span>Three tools.</span></span>
+      <span class="ln"><span>One small app.</span></span>
+    </h1>
+    <p class="lead reveal" style="--d:.45s">Lumen is a native clock, launcher and clear taskbar. It replaces Rainmeter, PowerToys Run and TranslucentTB with up to 40&nbsp;MB of RAM.</p>
+    <div class="cta reveal" style="--d:.6s">
+      <a class="btn" href="https://github.com/hasthij/Lumen/releases/latest">Download for Windows <span class="arr" aria-hidden="true">→</span></a>
+      <a class="btn btn-ghost" href="https://github.com/hasthij/Lumen">Source on GitHub</a>
+    </div>
+
+    <figure class="desk" data-in>
+      <div class="wall"></div>
+      <img class="s-clock" src="shots/clock.png" alt="The Lumen clock skin">
+      <div class="s-island stack" data-cycle="4600" aria-label="The Lumen island">
+        <div class="shot on"><i class="glass" style="--m:url(shots/island-media.png)"></i><img src="shots/island-media.png" alt="Island Media tab: Spotify cover, colour tint and controls"></div>
+        <div class="shot"><i class="glass" style="--m:url(shots/island-system.png)"></i><img src="shots/island-system.png" alt="Island System tab: CPU, memory, disk and battery gauges"></div>
+        <div class="shot"><i class="glass" style="--m:url(shots/island-sound.png)"></i><img src="shots/island-sound.png" alt="Island Sound tab: per-app volume sliders" loading="lazy"></div>
+        <div class="shot"><i class="glass" style="--m:url(shots/island-launch.png)"></i><img src="shots/island-launch.png" alt="Island Launch tab: pinned apps" loading="lazy"></div>
+        <div class="shot"><i class="glass" style="--m:url(shots/island-notes.png)"></i><img src="shots/island-notes.png" alt="Island Notes tab: sticky notes" loading="lazy"></div>
+      </div>
+      <div class="s-launcher" aria-label="The Lumen launcher">
+        <img id="heroType" src="shots/type-a-0.png" alt="The launcher typing a search">
+      </div>
+    </figure>
+    <p class="cap reveal">Screenshots of the running app.</p>
+  </section>
+
+  <section class="scrolly" id="demo" aria-label="Lumen in use">
+    <div class="pin wrap">
+      <ol class="story">
+        <li><h3>Press Alt + Space</h3><p>The launcher opens over whatever you are doing.</p></li>
+        <li><h3>Type to search</h3><p>Apps, windows, folders and the web in one list.</p></li>
+        <li><h3>Calculate in place</h3><p>Maths, units and time answer as you type.</p></li>
+        <li><h3>Island: Media</h3><p>Spotify and any other player, tinted by the album cover.</p></li>
+        <li><h3>Island: System</h3><p>CPU, memory, disk and battery at a glance.</p></li>
+        <li><h3>Island: Sound</h3><p>Per-app volume and brightness sliders.</p></li>
+        <li><h3>Island: Launch</h3><p>Pinned apps, one click away.</p></li>
+        <li><h3>Island: Notes</h3><p>Sticky notes that stay out of the way.</p></li>
+      </ol>
+      <div class="stage2">
+        <div class="wall"></div>
+        <div class="sc-isl stack" id="scIsl">
+          <div class="shot"><i class="glass" style="--m:url(shots/island-media.png)"></i><img src="shots/island-media.png" alt="Island Media tab" loading="lazy"></div>
+          <div class="shot"><i class="glass" style="--m:url(shots/island-system.png)"></i><img src="shots/island-system.png" alt="Island System tab" loading="lazy"></div>
+          <div class="shot"><i class="glass" style="--m:url(shots/island-sound.png)"></i><img src="shots/island-sound.png" alt="Island Sound tab" loading="lazy"></div>
+          <div class="shot"><i class="glass" style="--m:url(shots/island-launch.png)"></i><img src="shots/island-launch.png" alt="Island Launch tab" loading="lazy"></div>
+          <div class="shot"><i class="glass" style="--m:url(shots/island-notes.png)"></i><img src="shots/island-notes.png" alt="Island Notes tab" loading="lazy"></div>
+        </div>
+        <img class="sc-launch" id="scLaunch" src="shots/type-a-0.png" alt="The launcher, typing">
+        <div class="sc-keys" id="scKeys" aria-hidden="true"><kbd>Alt</kbd><kbd>Space</kbd></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section" id="modules">
+    <header class="sec-head">
+      <p class="label reveal">Modules</p>
+      <h2 class="reveal">Each one replaces a tool you already run.</h2>
+    </header>
+    <div class="rows">
+      <article class="row reveal">
+        <span class="num">01</span>
+        <div><h3>Clock</h3><p class="from">Replaces Rainmeter</p></div>
+        <p>Draws your skin natively and matches Rainmeter to within a pixel. Size, opacity, colour, 12 or 24 hour, drag to move.</p>
+        <p class="spec">9.8 MB<br><span>clock alone, vs 22 MB</span></p>
+      </article>
+      <article class="row reveal">
+        <span class="num">02</span>
+        <div><h3>Launcher</h3><p class="from">Replaces PowerToys Run</p></div>
+        <p>Apps, files, folders, calculator, units, windows, shell, system commands and web. New apps appear without a restart.</p>
+        <p class="spec">13 plugins<br><span>Alt + Space</span></p>
+      </article>
+      <article class="row reveal">
+        <span class="num">03</span>
+        <div><h3>Clear taskbar</h3><p class="from">Replaces TranslucentTB</p></div>
+        <p>Transparent, tinted or blurred per situation: desktop, maximised window, Start, Task View. Includes a restore button and a fail-safe.</p>
+        <p class="spec">4 states<br><span>auto-disables on fault</span></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap section" id="island">
+    <header class="sec-head">
+      <p class="label reveal">Island</p>
+      <h2 class="reveal">A notch that becomes what you need.</h2>
+      <p class="lead reveal">A media player, system stats, per-app volume, launch shortcuts and sticky notes. Every feature has its own toggle.</p>
+    </header>
+    <div class="showcase reveal">
+      <div class="backdrop" aria-hidden="true"></div>
+      <div class="stack tabbed" id="islTabs">
+        <div class="shot on" data-t="Media"><i class="glass" style="--m:url(shots/island-media.png)"></i><img src="shots/island-media.png" alt="Island Media tab"></div>
+        <div class="shot" data-t="System"><i class="glass" style="--m:url(shots/island-system.png)"></i><img src="shots/island-system.png" alt="Island System tab"></div>
+        <div class="shot" data-t="Sound"><i class="glass" style="--m:url(shots/island-sound.png)"></i><img src="shots/island-sound.png" alt="Island Sound tab" loading="lazy"></div>
+        <div class="shot" data-t="Launch"><i class="glass" style="--m:url(shots/island-launch.png)"></i><img src="shots/island-launch.png" alt="Island Launch tab" loading="lazy"></div>
+        <div class="shot" data-t="Notes"><i class="glass" style="--m:url(shots/island-notes.png)"></i><img src="shots/island-notes.png" alt="Island Notes tab" loading="lazy"></div>
+      </div>
+      <div class="seg" role="tablist" aria-label="Island tabs"></div>
+    </div>
+    <ul class="feats">
+      <li class="reveal"><h3>Smart media player</h3><p>The island takes its colour from your Spotify cover, with a soft blurred backdrop. One toggle turns it off.</p></li>
+      <li class="reveal" style="--d:.1s"><h3>Any player</h3><p>Spotify, browsers and other apps. When several play at once they share the island side by side.</p></li>
+      <li class="reveal" style="--d:.2s"><h3>Controls built in</h3><p>Play, pause, skip and seek from the island. Volume and brightness live on the Sound tab.</p></li>
+    </ul>
+  </section>
+
+  <section class="wrap section" id="settings">
+    <header class="sec-head">
+      <p class="label reveal">Settings</p>
+      <h2 class="reveal">Everything is a live toggle.</h2>
+      <p class="lead reveal">A Windows 11 style settings window. Turn a module off and it unloads, freeing its memory.</p>
+    </header>
+    <div class="showcase win reveal">
+      <div class="stack tabbed" id="setTabs">
+        <div class="shot on" data-t="General"><img src="shots/settings-general.png" alt="Lumen settings, General page"></div>
+        <div class="shot" data-t="Appearance"><img src="shots/settings-appearance.png" alt="Lumen settings, Appearance page" loading="lazy"></div>
+        <div class="shot" data-t="Island"><img src="shots/settings-island.png" alt="Lumen settings, Island page" loading="lazy"></div>
+        <div class="shot" data-t="Launcher"><img src="shots/settings-launcher.png" alt="Lumen settings, Launcher page" loading="lazy"></div>
+        <div class="shot" data-t="Taskbar"><img src="shots/settings-taskbar.png" alt="Lumen settings, Taskbar page" loading="lazy"></div>
+      </div>
+      <div class="seg" role="tablist" aria-label="Settings pages"></div>
+    </div>
+  </section>
+
+  <section class="wrap section" id="performance">
+    <header class="sec-head">
+      <p class="label reveal">Performance</p>
+      <h2 class="reveal">The old stack used about 318&nbsp;MB.</h2>
+    </header>
+    <div class="stats">
+      <div class="stat reveal"><b data-count="40" data-prefix="up to " data-suffix=" MB">0</b><span>RAM with every module running</span></div>
+      <div class="stat reveal" style="--d:.08s"><b data-count="0.02" data-dec="2" data-suffix="%">0</b><span>CPU at idle</span></div>
+      <div class="stat reveal" style="--d:.16s"><b data-count="342">0</b><span>apps indexed live</span></div>
+      <div class="stat reveal" style="--d:.24s"><b data-count="0">0</b><span>admin rights to install</span></div>
+    </div>
+  </section>
+
+  <section class="wrap section" id="install">
+    <header class="sec-head">
+      <p class="label reveal">Install</p>
+      <h2 class="reveal">Run one file.</h2>
+    </header>
+    <ol class="steps">
+      <li class="reveal"><span class="num">1</span><div><h3>Download LumenSetup.exe</h3><p>From the latest GitHub release. Installs for your account only.</p></div></li>
+      <li class="reveal"><span class="num">2</span><div><h3>Run it</h3><p>The files aren’t code-signed yet. If SmartScreen warns, choose More info, then Run anyway.</p></div></li>
+      <li class="reveal"><span class="num">3</span><div><h3>Press Alt + Space</h3><p>Open settings from the tray icon. Uninstall any time from Apps and features.</p></div></li>
+    </ol>
+    <div class="cta reveal">
+      <a class="btn" href="https://github.com/hasthij/Lumen/releases/latest">Download for Windows <span class="arr" aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <a class="brand" href="#top"><svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15.4" fill="#000" stroke="#2a2a2a" stroke-width="1.5"/><use href="#beam" fill="#fff"/></svg><span>Lumen</span></a>
+  <p>GPL-3.0-or-later</p>
+  <a href="https://github.com/hasthij/Lumen">GitHub</a>
+</footer>
+<script src="main.js"></script>
+</body>
+</html>
