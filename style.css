@@ -272,7 +272,9 @@ h1 .ln:nth-child(2)>span{background:linear-gradient(100deg,#8f8f8f 20%,#fff 45%,
 /* performance bars */
 .bars{display:grid;gap:22px;padding:8px 0 0}
 .bar{display:grid;grid-template-columns:1fr auto;gap:10px 20px;align-items:end;font-size:14px;color:var(--muted)}
-.bar b{font:600 15px var(--mono);color:var(--text)}
+.bar b{font:600 15px var(--mono);color:var(--text);grid-column:2;grid-row:1}
+.bar span{grid-column:1;grid-row:1}
+.bar .trk{grid-row:2}
 .bar .trk{grid-column:1/-1;height:10px;border-radius:6px;background:#111;overflow:hidden}
 .bar .trk i{display:block;height:100%;width:var(--w);border-radius:6px;background:#3a3a3a;transform:scaleX(0);transform-origin:0 50%;transition:transform 1.6s var(--ease) .3s}
 .bar.lumen{color:var(--text)}
