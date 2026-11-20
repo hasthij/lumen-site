@@ -14,7 +14,7 @@
   const io = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
   }), { threshold: .12, rootMargin: '0px 0px -5% 0px' });
-  $$('.reveal, [data-in], .reveal-mask, .rows, .stats, .steps').forEach(el => io.observe(el));
+  $$('.reveal, [data-in], .reveal-mask, .rows, .stats, .steps, .bars').forEach(el => io.observe(el));
 
   // Sticky nav: progress line + border once scrolled. Hero desk parallax.
   const nav = $('#nav'), desk = $('.desk');
@@ -60,19 +60,30 @@
   // Typing: real launcher frames captured at every keystroke
   const F = { a: 7, b: 7 }; // frames 0..n per query ("spotify", "=24*7+3")
   const src = (k, i) => `shots/type-${k}-${i}.png`;
-  for (const k of ['a', 'b']) for (let i = 0; i <= F[k]; i++) new Image().src = src(k, i);
   const sleep = ms => new Promise(r => setTimeout(r, ms));
+  // Every frame is a decoded <img> layer in a stack: showing one is a class toggle, no re-decode or layout.
+  const buildFrames = box => {
+    box.replaceChildren();
+    const m = {};
+    for (const k of ['a', 'b']) for (let i = 0; i <= F[k]; i++) {
+      const im = Object.assign(new Image(), { src: src(k, i), alt: '', decoding: 'async' });
+      box.append(im); m[k + i] = im;
+    }
+    let cur = null;
+    return key => { if (cur === m[key]) return; if (cur) cur.classList.remove('on'); cur = m[key]; if (cur) cur.classList.add('on'); };
+  };
 
-  const heroImg = $('#heroType');
+  const setHero = buildFrames($('#heroType'));
   let heroVis = true;
   new IntersectionObserver(([e]) => { heroVis = e.isIntersecting; }).observe($('.desk'));
   (async function heroTyping() {
-    if (reduce) { heroImg.src = src('a', F.a); return; }
+    if (reduce) { setHero('a' + F.a); return; }
+    setHero('a0');
     await sleep(2400);
     for (;;) for (const k of ['a', 'b']) {
-      for (let i = 0; i <= F[k]; i++) { while (!heroVis || document.hidden) await sleep(300); heroImg.src = src(k, i); await sleep(i === 0 ? 900 : 120 + Math.random() * 70); }
+      for (let i = 0; i <= F[k]; i++) { while (!heroVis || document.hidden) await sleep(300); setHero(k + i); await sleep(i === 0 ? 900 : 120 + Math.random() * 70); }
       await sleep(2600);
-      for (let i = F[k] - 1; i >= 0; i--) { heroImg.src = src(k, i); await sleep(38); }
+      for (let i = F[k] - 1; i >= 0; i--) { setHero(k + i); await sleep(38); }
       await sleep(500);
     }
   })();
@@ -80,7 +91,7 @@
   // Scroll-driven story: the pinned stage plays the same real frames as you scroll
   const sec = $('#demo');
   if (sec && !reduce) {
-    const steps = $$('.story li', sec), stage = $('.stage2', sec), launch = $('#scLaunch'), isl = $('#scIsl');
+    const steps = $$('.story li', sec), stage = $('.stage2', sec), setLaunch = buildFrames($('#scLaunch')), isl = $('#scIsl');
     const N = steps.length, clamp = (v, a, b) => Math.min(Math.max(v, a), b);
     let lastKey = '';
     const draw = () => {
@@ -96,8 +107,8 @@
       if (key === lastKey) return; lastKey = key;
       stage.classList.toggle('keys', key === 'keys');
       stage.classList.toggle('mode-isl', key[0] === 'i');
-      if (key[0] === 'a' || key[0] === 'b') launch.src = src(key[0], +key.slice(1));
-      if (key === 'keys') launch.src = src('a', 0);
+      if (key[0] === 'a' || key[0] === 'b') setLaunch(key);
+      if (key === 'keys') setLaunch('a0');
       if (key[0] === 'i') show(isl, +key.slice(1));
     };
     addEventListener('scroll', draw, { passive: true });
@@ -142,4 +153,28 @@
     new IntersectionObserver(([e]) => { vis = e.isIntersecting; }, { threshold: .4 }).observe(stack);
     if (!reduce) setInterval(() => { if (auto && vis && !document.hidden) go((cur + 1) % shots.length); }, 4600);
   });
+
+  // Hero: pointer tilt (each layer moves by its own depth) plus a soft spotlight, only while the pointer is over the desk.
+  const dsk = $('.desk');
+  if (dsk && !reduce && matchMedia('(hover:hover)').matches) {
+    $$('[data-depth]', dsk).forEach(e => e.style.setProperty('--z', e.dataset.depth));
+    let raf = 0, px = 0, py = 0;
+    const apply = () => { raf = 0; dsk.style.setProperty('--tx', px.toFixed(3)); dsk.style.setProperty('--ty', py.toFixed(3)); };
+    dsk.addEventListener('pointermove', e => {
+      const r = dsk.getBoundingClientRect();
+      px = (e.clientX - r.left) / r.width - .5; py = (e.clientY - r.top) / r.height - .5;
+      dsk.style.setProperty('--gx', (px + .5) * 100 + '%'); dsk.style.setProperty('--gy', (py + .5) * 100 + '%'); dsk.style.setProperty('--go', 1);
+      raf ||= requestAnimationFrame(apply);
+    });
+    dsk.addEventListener('pointerleave', () => { px = py = 0; dsk.style.setProperty('--go', 0); raf ||= requestAnimationFrame(apply); });
+  }
+  $$('.feats li').forEach(l => l.addEventListener('pointermove', e => {
+    const r = l.getBoundingClientRect();
+    l.style.setProperty('--mx', e.clientX - r.left + 'px'); l.style.setProperty('--my', e.clientY - r.top + 'px');
+  }));
+
+  // Pause the endless CSS animations while the tab is hidden or the hero is off-screen.
+  const setPaused = () => document.documentElement.classList.toggle('paused', document.hidden || !heroVis);
+  document.addEventListener('visibilitychange', setPaused);
+  new IntersectionObserver(([e]) => { heroVis = e.isIntersecting; setPaused(); }, { rootMargin: '200px' }).observe($('.desk'));
 })();
