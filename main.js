@@ -26,6 +26,15 @@
       nav.style.setProperty('--p', max > 0 ? y / max : 0);
       nav.classList.toggle('scrolled', y > 8);
       if (!reduce) {
+        // Scroll-linked motion: wallpaper parallax/zoom, showcases rise and scale in, backdrops drift.
+        $$('.showcase').forEach(s => {
+          const b = s.getBoundingClientRect(), v = Math.min(Math.max((innerHeight - b.top) / (innerHeight * .6), 0), 1);
+          s.style.setProperty('--sv', v.toFixed(3));
+          s.style.setProperty('--bp', Math.min(Math.max((innerHeight - b.top) / (innerHeight + b.height), 0), 1).toFixed(3));
+        });
+        const wr = desk.getBoundingClientRect(), wt = Math.min(Math.max((innerHeight - wr.top) / (innerHeight + wr.height), 0), 1);
+        desk.style.setProperty('--wy', ((wt - .5) * -60).toFixed(1));
+        desk.style.setProperty('--ws', wt.toFixed(3));
         const r = desk.getBoundingClientRect(), t = Math.min(Math.max((innerHeight - r.top) / (innerHeight + r.height), 0), 1);
         desk.style.setProperty('--py', ((.5 - t) * 40).toFixed(1));
         desk.style.setProperty('--ps', Math.max(t - .5, 0).toFixed(3));
